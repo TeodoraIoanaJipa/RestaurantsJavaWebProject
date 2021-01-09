@@ -1,5 +1,8 @@
 package com.teo.restaurants.repository;
 
+import com.teo.restaurants.dto.CreateOrderDto;
+import com.teo.restaurants.dto.OrderDto;
+import com.teo.restaurants.mapper.OrderMapper;
 import com.teo.restaurants.model.Order;
 import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.model.User;
@@ -15,12 +18,8 @@ import java.util.*;
 
 @Repository
 public class OrderRepository {
-
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    public OrderRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public int save(Restaurant restaurant, User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -37,20 +36,33 @@ public class OrderRepository {
         return (int) keyHolder.getKey().intValue();
     }
 
-    public List<Order> getOrderByUserId(Integer userId) {
-        String sql = "SELECT * from orders WHERE user_id = ?";
+    public List<OrderDto> getOrderByUserId(Integer userId) {
+        String sql = "SELECT * from orders WHERE user_id = " + userId;
         try {
             List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql);
-            List<Order> ordersList = new ArrayList<>();
+            List<OrderDto> ordersList = new ArrayList<>();
             for (Map<String, Object> map : orders) {
-                Order order = new Order();
-                order.setOrderId((Integer) map.get("id"));
-                order.setCreatedDate((Date) map.get("created_date"));
+                OrderDto order = OrderDto.builder()
+                        .orderId((Integer) map.get("order_id"))
+                        .restaurantId((Integer) map.get("restaurant_id"))
+                        .userId((Integer) map.get("user_id"))
+                        .createdDate((Date) map.get("created_date"))
+                        .build();
                 ordersList.add(order);
             }
             return ordersList;
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
+        }
+    }
+
+    public Optional<Order> getOrderByOrderId(Integer orderId) {
+        String sql = "SELECT * from orders WHERE order_id = ?";
+        try {
+            Order order = jdbcTemplate.queryForObject(sql, new OrderMapper(), orderId);
+            return Optional.of(order);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
     }
 }

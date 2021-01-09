@@ -3,7 +3,6 @@ package com.teo.restaurants.controller;
 import com.teo.restaurants.dto.ReviewDto;
 import com.teo.restaurants.exception.NoRestaurantFoundException;
 import com.teo.restaurants.exception.UserNotFoundException;
-import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.model.Review;
 import com.teo.restaurants.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/review")
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;

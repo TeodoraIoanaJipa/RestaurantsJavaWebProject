@@ -1,12 +1,11 @@
 package com.teo.restaurants.controller;
 
-import com.teo.restaurants.model.OrderItem;
-
+import com.teo.restaurants.dto.CreateOrderDto;
+import com.teo.restaurants.exception.NoRestaurantFoundException;
 import com.teo.restaurants.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -16,8 +15,21 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public void createOrder(@RequestBody List<OrderItem> orderItems, @RequestParam Integer restaurantId,
-                            @RequestParam Integer userId) {
-        orderService.save(orderItems, restaurantId, userId);
+    public ResponseEntity createOrder(@RequestBody CreateOrderDto createOrderDto) {
+        try {
+            orderService.save(createOrderDto);
+            return ResponseEntity.ok("User saved.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-by-user")
+    public ResponseEntity getOrdersByUserId(@RequestParam Integer userId) {
+        try {
+            return ResponseEntity.ok(orderService.findAllOrdersByUserId(userId));
+        } catch (NoRestaurantFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

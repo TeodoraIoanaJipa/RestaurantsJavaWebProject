@@ -15,6 +15,12 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public void save(User user) {
+        String sql = "INSERT into users VALUES(NULL, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getUsername(),
+                user.getEmail(), user.getPassword());
+    }
+
     public Optional<User> getUserById(Integer id) {
         String sql = "SELECT * from users WHERE id = ?";
         try {

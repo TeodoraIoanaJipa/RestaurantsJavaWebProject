@@ -1,8 +1,11 @@
 package com.teo.restaurants.controller;
 
+import com.teo.restaurants.exception.NoRestaurantFoundException;
+import com.teo.restaurants.exception.UserNotFoundException;
 import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,18 +18,30 @@ public class RestaurantsController {
     private RestaurantService restaurantService;
 
     @GetMapping("/get-by-name")
-    public Restaurant getRestaurantByName(@RequestParam String name) {
-        return restaurantService.findRestaurantByName(name);
+    public ResponseEntity getRestaurantByName(@RequestParam String name) {
+        try {
+            return ResponseEntity.ok(restaurantService.findRestaurantByName(name));
+        } catch (NoRestaurantFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/get-by-type")
-    public List<Restaurant> getRestaurantsByType(@RequestParam String type) {
-        return restaurantService.findRestaurantsByType(type);
+    public ResponseEntity getRestaurantsByType(@RequestParam String type) {
+        try {
+            return ResponseEntity.ok(restaurantService.findRestaurantsByType(type));
+        } catch (NoRestaurantFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/get-by-price-category")
-    public List<Restaurant> getRestaurantsByPriceCategory(@RequestParam String priceCategory) {
-        return restaurantService.findRestaurantsByPriceCategory(priceCategory);
+    public ResponseEntity getRestaurantsByPriceCategory(@RequestParam String priceCategory) {
+        try {
+            return ResponseEntity.ok(restaurantService.findRestaurantsByPriceCategory(priceCategory));
+        } catch (NoRestaurantFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/all")

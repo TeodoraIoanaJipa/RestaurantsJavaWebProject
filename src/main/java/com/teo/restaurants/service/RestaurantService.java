@@ -38,7 +38,7 @@ public class RestaurantService {
         if (restaurant.isPresent()) {
             return restaurant.get();
         } else {
-            throw new NoRestaurantFoundException("No restaurant with name " + name + " was found");
+            throw new NoRestaurantFoundException("Ooopsy! No restaurant with name " + name + " was found");
         }
     }
 }
