@@ -16,6 +16,15 @@ public class RestaurantsController {
     @Autowired
     private RestaurantService restaurantService;
 
+    @GetMapping("/get-by-id")
+    public ResponseEntity getRestaurantById(@RequestParam Integer id) {
+        try {
+            return ResponseEntity.ok(restaurantService.findRestaurantById(id));
+        } catch (RestaurantNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/get-by-name")
     public ResponseEntity getRestaurantByName(@RequestParam String name) {
         try {

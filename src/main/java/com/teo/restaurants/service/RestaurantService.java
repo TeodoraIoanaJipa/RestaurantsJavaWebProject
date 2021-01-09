@@ -25,6 +25,15 @@ public class RestaurantService {
         return restaurantsRepository.findAll();
     }
 
+    public Restaurant findRestaurantById(Integer id) {
+        Optional<Restaurant> restaurant = restaurantsRepository.getRestaurantById(id);
+        if (restaurant.isPresent()) {
+            return restaurant.get();
+        } else {
+            throw new RestaurantNotFoundException("Ooopsy! No restaurant with id " + id + " was found");
+        }
+    }
+
     public List<Restaurant> findRestaurantsByType(String type) {
         return restaurantsRepository.findAllByType(type);
     }

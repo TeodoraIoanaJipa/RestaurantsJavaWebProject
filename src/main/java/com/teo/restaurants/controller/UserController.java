@@ -19,7 +19,7 @@ public class UserController {
     public ResponseEntity createUser(@RequestBody User user) {
         try {
             userService.signUp(user);
-            return ResponseEntity.ok("User saved.");
+            return ResponseEntity.ok("User saved successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

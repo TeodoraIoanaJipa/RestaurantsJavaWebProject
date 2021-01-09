@@ -18,7 +18,7 @@ public class OrderController {
     public ResponseEntity createOrder(@RequestBody CreateOrderDto createOrderDto) {
         try {
             orderService.save(createOrderDto);
-            return ResponseEntity.ok("Order saved.");
+            return ResponseEntity.ok("Order created successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

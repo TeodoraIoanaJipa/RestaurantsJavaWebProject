@@ -15,6 +15,7 @@ import com.teo.restaurants.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,15 @@ public class ReviewService {
     private OrderRepository orderRepository;
 
     public void save(ReviewDto reviewDto) {
+        Review review = convertFromDto(reviewDto);
+        reviewRepository.save(review);
+    }
+
+    private Review convertFromDto(ReviewDto reviewDto){
+        Review review = new Review();
+        review.setComment(reviewDto.getComment());
+        review.setGrade(reviewDto.getGrade());
+
         Optional<Restaurant> restaurant = restaurantsRepository.getRestaurantById(reviewDto.getRestaurantId());
         if (restaurant.isEmpty()) {
             throw new RestaurantNotFoundException("No restaurant was found");
@@ -50,18 +60,21 @@ public class ReviewService {
             throw new OrderNotFoundException();
         }
 
-        Review review = new Review();
-        review.setComment(reviewDto.getComment());
-        review.setGrade(reviewDto.getGrade());
         review.setUser(user.get());
         review.setRestaurant(restaurant.get());
         review.setOrder(order.get());
         review.setCreatedDate(new Date());
 
-        reviewRepository.save(review);
+        return review;
     }
 
     public List<Review> findAll() {
-        return reviewRepository.findAll();
+        List<Review> reviews = new ArrayList<>();
+        List<ReviewDto> reviewDtos = reviewRepository.findAll();
+        reviewDtos.forEach(reviewDto -> {
+           Review review = convertFromDto(reviewDto);
+           reviews.add(review);
+        });
+        return reviews;
     }
 }

@@ -21,7 +21,7 @@ public class ReviewController {
     public ResponseEntity addReview(@RequestBody ReviewDto reviewDto) {
         try {
             reviewService.save(reviewDto);
-            return ResponseEntity.ok("Review added.");
+            return ResponseEntity.ok("Review added successfully.");
         } catch (RestaurantNotFoundException | UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

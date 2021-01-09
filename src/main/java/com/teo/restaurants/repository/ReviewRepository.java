@@ -1,5 +1,6 @@
 package com.teo.restaurants.repository;
 
+import com.teo.restaurants.dto.ReviewDto;
 import com.teo.restaurants.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,23 +24,26 @@ public class ReviewRepository {
                 review.getCreatedDate());
     }
 
-    private Review mapReview(Map<String, Object> map) {
-        Review review = new Review();
-        review.setId((Integer) map.get("id"));
-        review.setGrade((Integer) map.get("grade"));
-        review.setComment((String) map.get("comment"));
-        review.setCreatedDate((Date) map.get("created_date"));
-        return review;
+    private ReviewDto mapReview(Map<String, Object> map) {
+        return ReviewDto.builder()
+                .id((Integer) map.get("id"))
+                .grade((Integer) map.get("grade"))
+                .comment((String) map.get("comment"))
+                .restaurantId((Integer) map.get("restaurant_id"))
+                .orderId((Integer) map.get("order_id"))
+                .userId((Integer) map.get("user_id"))
+                .createdDate((Date) map.get("created_date"))
+                .build();
     }
 
-    public List<Review> findAll() {
+    public List<ReviewDto> findAll() {
         String sql = "SELECT * from reviews";
         try {
             List<Map<String, Object>> reviews = jdbcTemplate.queryForList(sql);
-            List<Review> reviewsList = new ArrayList<>();
+            List<ReviewDto> reviewsList = new ArrayList<>();
             for (Map<String, Object> map : reviews) {
-                Review review = mapReview(map);
-                reviewsList.add(review);
+                ReviewDto reviewDto = mapReview(map);
+                reviewsList.add(reviewDto);
             }
             return reviewsList;
         } catch (EmptyResultDataAccessException e) {

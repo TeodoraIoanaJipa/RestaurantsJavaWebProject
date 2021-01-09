@@ -1,5 +1,6 @@
 package com.teo.restaurants.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ public class Review {
     private String comment;
     private Restaurant restaurant;
     private User user;
+    @JsonIgnore
     private Order order;
     private Date createdDate;
 }
