@@ -1,7 +1,7 @@
 package com.teo.restaurants.service;
 
 import com.teo.restaurants.dto.ReviewDto;
-import com.teo.restaurants.exception.NoRestaurantFoundException;
+import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.exception.OrderNotFoundException;
 import com.teo.restaurants.exception.UserNotFoundException;
 import com.teo.restaurants.model.Order;
@@ -37,7 +37,7 @@ public class ReviewService {
     public void save(ReviewDto reviewDto) {
         Optional<Restaurant> restaurant = restaurantsRepository.getRestaurantById(reviewDto.getRestaurantId());
         if (restaurant.isEmpty()) {
-            throw new NoRestaurantFoundException("No restaurant was found");
+            throw new RestaurantNotFoundException("No restaurant was found");
         }
 
         Optional<User> user = userRepository.getUserById(reviewDto.getUserId());

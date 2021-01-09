@@ -1,7 +1,7 @@
 package com.teo.restaurants.controller;
 
 import com.teo.restaurants.dto.ReviewDto;
-import com.teo.restaurants.exception.NoRestaurantFoundException;
+import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.exception.UserNotFoundException;
 import com.teo.restaurants.model.Review;
 import com.teo.restaurants.service.ReviewService;
@@ -22,7 +22,7 @@ public class ReviewController {
         try {
             reviewService.save(reviewDto);
             return ResponseEntity.ok("Review added.");
-        } catch (NoRestaurantFoundException | UserNotFoundException e) {
+        } catch (RestaurantNotFoundException | UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

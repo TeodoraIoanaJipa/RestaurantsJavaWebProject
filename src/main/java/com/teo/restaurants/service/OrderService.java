@@ -4,7 +4,7 @@ import com.teo.restaurants.dto.CreateOrderDto;
 import com.teo.restaurants.dto.OrderDto;
 import com.teo.restaurants.dto.OrderItemDto;
 import com.teo.restaurants.exception.FoodProductNotFound;
-import com.teo.restaurants.exception.NoRestaurantFoundException;
+import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.exception.UserNotFoundException;
 import com.teo.restaurants.model.*;
 import com.teo.restaurants.repository.*;
@@ -33,7 +33,7 @@ public class OrderService {
         Order order = new Order();
         Optional<Restaurant> restaurant = restaurantsRepository.getRestaurantById(restaurantId);
         if (restaurant.isEmpty()) {
-            throw new NoRestaurantFoundException("No restaurant found for id " + restaurantId);
+            throw new RestaurantNotFoundException("No restaurant found for id " + restaurantId);
         }
         Optional<User> user = userRepository.getUserById(userId);
         if (user.isEmpty()) {

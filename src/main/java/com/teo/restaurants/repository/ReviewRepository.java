@@ -1,6 +1,5 @@
 package com.teo.restaurants.repository;
 
-import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;

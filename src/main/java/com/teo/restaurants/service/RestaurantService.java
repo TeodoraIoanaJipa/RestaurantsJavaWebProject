@@ -1,6 +1,6 @@
 package com.teo.restaurants.service;
 
-import com.teo.restaurants.exception.NoRestaurantFoundException;
+import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.repository.RestaurantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class RestaurantService {
         if (restaurant.isPresent()) {
             return restaurant.get();
         } else {
-            throw new NoRestaurantFoundException("Ooopsy! No restaurant with name " + name + " was found");
+            throw new RestaurantNotFoundException("Ooopsy! No restaurant with name " + name + " was found");
         }
     }
 }

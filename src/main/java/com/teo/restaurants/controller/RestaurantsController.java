@@ -1,7 +1,6 @@
 package com.teo.restaurants.controller;
 
-import com.teo.restaurants.exception.NoRestaurantFoundException;
-import com.teo.restaurants.exception.UserNotFoundException;
+import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class RestaurantsController {
     public ResponseEntity getRestaurantByName(@RequestParam String name) {
         try {
             return ResponseEntity.ok(restaurantService.findRestaurantByName(name));
-        } catch (NoRestaurantFoundException e) {
+        } catch (RestaurantNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -30,7 +29,7 @@ public class RestaurantsController {
     public ResponseEntity getRestaurantsByType(@RequestParam String type) {
         try {
             return ResponseEntity.ok(restaurantService.findRestaurantsByType(type));
-        } catch (NoRestaurantFoundException e) {
+        } catch (RestaurantNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -39,7 +38,7 @@ public class RestaurantsController {
     public ResponseEntity getRestaurantsByPriceCategory(@RequestParam String priceCategory) {
         try {
             return ResponseEntity.ok(restaurantService.findRestaurantsByPriceCategory(priceCategory));
-        } catch (NoRestaurantFoundException e) {
+        } catch (RestaurantNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -50,7 +49,12 @@ public class RestaurantsController {
     }
 
     @PostMapping("/add")
-    public void addRestaurants(@RequestBody List<Restaurant> restaurants) {
-        restaurantService.saveRestaurants(restaurants);
+    public ResponseEntity addRestaurants(@RequestBody List<Restaurant> restaurants) {
+        try {
+            restaurantService.saveRestaurants(restaurants);
+            return ResponseEntity.ok("Restaurants saved.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
