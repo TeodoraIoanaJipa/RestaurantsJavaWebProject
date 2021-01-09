@@ -31,22 +31,21 @@ public class OrderService {
     public void save(List<OrderItem> orderItemList, Integer restaurantId, Integer userId) {
         Optional<Restaurant> chosenRestaurant = restaurantsRepository.getRestaurantById(restaurantId);
         Optional<User> user = userRepository.getUserById(userId);
-        if (chosenRestaurant.isPresent()) {
-            if (user.isPresent()) {
-                Integer orderId = orderRepository.save(chosenRestaurant.get(), user.get());
-                Order order = new Order();
-                order.setOrderId(orderId);
-                orderItemList.forEach(orderItem -> {
-                    foodProductRepository.getFoodProductByIdAndRestaurantId(orderItem.getId(), chosenRestaurant.get().getId());
-                    orderItem.setOrder(order);
-                    orderItemRepository.save(orderItem);
-                });
-            } else {
-                throw new UserNotFoundException();
-            }
-        } else {
+        if (!chosenRestaurant.isPresent()) {
             throw new NoRestaurantFoundException("No restaurant found for id " + restaurantId);
         }
-
+        if (user.isPresent()) {
+            Integer orderId = orderRepository.save(chosenRestaurant.get(), user.get());
+            Order order = new Order();
+            order.setOrderId(orderId);
+            orderItemList.forEach(orderItem -> {
+                foodProductRepository.getFoodProductByIdAndRestaurantId(orderItem.getId(), chosenRestaurant.get().getId());
+                orderItem.setOrder(order);
+                orderItemRepository.save(orderItem);
+            });
+        } else {
+            throw new UserNotFoundException();
+        }
     }
+
 }

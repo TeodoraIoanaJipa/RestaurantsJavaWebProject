@@ -14,6 +14,21 @@ public class RestaurantsController {
     @Autowired
     private RestaurantService restaurantService;
 
+    @GetMapping("/get-by-name")
+    public Restaurant getRestaurantByName(@RequestParam String name) {
+        return restaurantService.findRestaurantByName(name);
+    }
+
+    @GetMapping("/get-by-type")
+    public List<Restaurant> getRestaurantsByType(@RequestParam String type) {
+        return restaurantService.findRestaurantsByType(type);
+    }
+
+    @GetMapping("/get-by-price-category")
+    public List<Restaurant> getRestaurantsByPriceCategory(@RequestParam String priceCategory) {
+        return restaurantService.findRestaurantsByPriceCategory(priceCategory);
+    }
+
     @GetMapping("/all")
     public List<Restaurant> getRestaurants() {
         return restaurantService.findAll();

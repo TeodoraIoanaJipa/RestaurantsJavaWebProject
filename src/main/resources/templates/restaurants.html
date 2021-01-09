@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurants</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body class="p-5 text-center bg-image"
+      style="
+      background-image: url('https://www.besthealthmag.ca/wp-content/uploads/2019/07/junk-food-1.gif');
+      height: 400px;
+    ">
+
+    <div th:switch="${restaurants}" class="list-group">
+        <h2 th:case="null" class="mb-3">No restaurants yet!</h2>
+        <h2 th:case="*" class="mb-3" style="background-color: white; width: auto;">
+            Available restaurants
+        </h2>
+        <a href="#" class="list-group-item list-group-item-action flex-column"
+           th:each="restaurant : ${restaurants}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1" th:text="${restaurant.name}"></h5>
+                <small>Opening time : <small th:text="${restaurant.openingTime}"></small></small>
+                <small>Closes at : <small th:text="${restaurant.closingTime}"></small></small>
+                <a th:href="@{/edit/{id}(id=${restaurant.id})}">Edit</a>
+            </div>
+            <small class="mb-1" th:text="${restaurant.description}"> </small>
+        </a>
+        <p><a href="/add">Add a new restaurant</a></p>
+    </div>
+
+</body>
+</html>
