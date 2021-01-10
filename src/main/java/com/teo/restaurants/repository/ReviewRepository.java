@@ -36,8 +36,7 @@ public class ReviewRepository {
                 .build();
     }
 
-    public List<ReviewDto> findAll() {
-        String sql = "SELECT * from reviews";
+    private List<ReviewDto> getReviews(String sql){
         try {
             List<Map<String, Object>> reviews = jdbcTemplate.queryForList(sql);
             List<ReviewDto> reviewsList = new ArrayList<>();
@@ -49,5 +48,20 @@ public class ReviewRepository {
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
+    }
+
+    public List<ReviewDto> findAll() {
+        String sql = "SELECT * from reviews";
+        return getReviews(sql);
+    }
+
+    public List<ReviewDto> findAllByRestaurantId(Integer restaurantId) {
+        String sql = "SELECT * from reviews where restaurant_id = "+ restaurantId;
+        return getReviews(sql);
+    }
+
+    public List<ReviewDto> findAllByUserId(Integer userId) {
+        String sql = "SELECT * from reviews where user_id = "+ userId;
+        return getReviews(sql);
     }
 }

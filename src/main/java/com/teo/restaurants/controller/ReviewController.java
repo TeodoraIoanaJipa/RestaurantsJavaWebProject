@@ -33,4 +33,14 @@ public class ReviewController {
         return reviewService.findAll();
     }
 
+    @GetMapping("/get-by-restaurant-id")
+    public List<Review> getAllReviewsByRestaurantId(@RequestParam Integer restaurantId) {
+        return reviewService.findAllByRestaurantId(restaurantId);
+    }
+
+    @GetMapping("/get-by-user-id")
+    public List<Review> getAllReviewsByUserId(@RequestParam Integer userId) {
+        return reviewService.findAllByUserId(userId);
+    }
+
 }

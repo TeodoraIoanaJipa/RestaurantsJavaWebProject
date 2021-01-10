@@ -77,4 +77,24 @@ public class ReviewService {
         });
         return reviews;
     }
+
+    public List<Review> findAllByRestaurantId(Integer restaurantId) {
+        List<Review> reviews = new ArrayList<>();
+        List<ReviewDto> reviewDtos = reviewRepository.findAllByRestaurantId(restaurantId);
+        reviewDtos.forEach(reviewDto -> {
+            Review review = convertFromDto(reviewDto);
+            reviews.add(review);
+        });
+        return reviews;
+    }
+
+    public List<Review> findAllByUserId(Integer userId) {
+        List<Review> reviews = new ArrayList<>();
+        List<ReviewDto> reviewDtos = reviewRepository.findAllByUserId(userId);
+        reviewDtos.forEach(reviewDto -> {
+            Review review = convertFromDto(reviewDto);
+            reviews.add(review);
+        });
+        return reviews;
+    }
 }
