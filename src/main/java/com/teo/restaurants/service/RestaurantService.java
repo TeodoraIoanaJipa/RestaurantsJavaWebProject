@@ -47,7 +47,13 @@ public class RestaurantService {
     }
 
     public List<Restaurant> findRestaurantsByPriceCategory(String priceCategory) {
-        return restaurantsRepository.findAllByPriceCategory(priceCategory);
+        if(priceCategory.toUpperCase().equals(PriceCategory.MODERAT.name()) ||
+                priceCategory.toUpperCase().equals(PriceCategory.ACCESIBIL.name()) ||
+                priceCategory.toUpperCase().equals(PriceCategory.PREMIUM.name()) ||
+                priceCategory.toUpperCase().equals(PriceCategory.RIDICAT.name())){
+            return restaurantsRepository.findAllByPriceCategory(priceCategory);
+        }
+        throw new RestaurantNotFoundException("Ooopsy! No restaurants with that price category were found");
     }
 
     public Restaurant findRestaurantByName(String name) {

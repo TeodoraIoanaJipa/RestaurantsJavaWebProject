@@ -1,6 +1,7 @@
 package com.teo.restaurants.service;
 
 import com.teo.restaurants.dto.PriceCategory;
+import com.teo.restaurants.dto.RestaurantType;
 import com.teo.restaurants.exception.PriceCategoryInvalidException;
 import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.model.Restaurant;
@@ -37,7 +38,7 @@ public class RestaurantServiceTest {
         Restaurant restaurant = new Restaurant();
         restaurant.setId(1);
         restaurant.setName("Ceainaria Infinitea");
-        restaurant.setDescription(" Te vei bucura de aromele ceaiurilor Infinitea, o paletă colorată de dulcețuri, sucuri de fructe proaspete");
+        restaurant.setDescription("Te vei bucura de aromele ceaiurilor Infinitea, o paletă colorată de dulcețuri, sucuri de fructe proaspete");
         restaurant.setOpeningTime("9:00");
         restaurant.setClosingTime("20:00");
         restaurant.setPriceCategory("ridicat");
@@ -135,11 +136,51 @@ public class RestaurantServiceTest {
     @DisplayName("find restaurants by price category success")
     void findRestaurantsByPriceCategory() {
         String priceCategory = PriceCategory.MODERAT.name();
+        List<Restaurant> expectedRestaurants = List.of(restaurants.get(1));
 
-        when(restaurantsRepository.findAllByPriceCategory(priceCategory)).thenReturn(List.of(restaurants.get(1)));
+        when(restaurantsRepository.findAllByPriceCategory(priceCategory)).thenReturn(expectedRestaurants);
         List<Restaurant> actualRestaurant = restaurantService.findRestaurantsByPriceCategory(priceCategory);
 
         verify(restaurantsRepository).findAllByPriceCategory(priceCategory);
-        assertEquals(actualRestaurant, List.of(restaurants.get(1)));
+        assertEquals(actualRestaurant, expectedRestaurants);
     }
+
+    @Test
+    @DisplayName("find restaurants by price category success empty list")
+    void findRestaurantsByPriceCategoryEmptyList() {
+        String priceCategory = PriceCategory.PREMIUM.name();
+        List<Restaurant> expectedRestaurants = new ArrayList<>();
+
+        when(restaurantsRepository.findAllByPriceCategory(priceCategory)).thenReturn(expectedRestaurants);
+        List<Restaurant> actualRestaurant = restaurantService.findRestaurantsByPriceCategory(priceCategory);
+
+        verify(restaurantsRepository).findAllByPriceCategory(priceCategory);
+        assertEquals(actualRestaurant, expectedRestaurants);
+    }
+
+
+    @Test
+    @DisplayName("find restaurants by price category failure")
+    void findRestaurantsByPriceCategoryFailure() {
+        String priceCategory = "mic";
+
+        RestaurantNotFoundException exception = assertThrows(RestaurantNotFoundException.class,
+                () -> restaurantService.findRestaurantsByPriceCategory(priceCategory));
+
+        assertEquals("Ooopsy! No restaurants with that price category were found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("find restaurants by type success")
+    void findRestaurantsByType() {
+        String type = RestaurantType.CEAINARIE.name();
+        List<Restaurant> expectedRestaurants = List.of(restaurants.get(0));
+
+        when(restaurantsRepository.findAllByType(type)).thenReturn(expectedRestaurants);
+        List<Restaurant> actualRestaurant = restaurantService.findRestaurantsByType(type);
+
+        verify(restaurantsRepository).findAllByType(type);
+        assertEquals(actualRestaurant, expectedRestaurants);
+    }
+
 }

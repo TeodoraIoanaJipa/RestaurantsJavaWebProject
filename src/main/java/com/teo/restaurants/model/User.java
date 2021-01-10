@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -22,6 +23,7 @@ public class User {
     private String username;
     @NotNull
     @Length(min = 5, max= 45)
+    @Email
     private String email;
     @JsonIgnore
     @NotNull

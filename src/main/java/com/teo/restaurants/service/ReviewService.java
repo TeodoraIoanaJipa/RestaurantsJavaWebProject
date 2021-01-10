@@ -40,7 +40,7 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    private Review convertFromDto(ReviewDto reviewDto){
+    Review convertFromDto(ReviewDto reviewDto){
         Review review = new Review();
         review.setComment(reviewDto.getComment());
         review.setGrade(reviewDto.getGrade());
