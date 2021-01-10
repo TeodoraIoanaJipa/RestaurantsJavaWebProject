@@ -45,7 +45,7 @@ public class ReviewService {
         review.setComment(reviewDto.getComment());
         review.setGrade(reviewDto.getGrade());
 
-        Optional<Restaurant> restaurant = restaurantsRepository.getRestaurantById(reviewDto.getRestaurantId());
+        Optional<Restaurant> restaurant = restaurantsRepository.findRestaurantById(reviewDto.getRestaurantId());
         if (restaurant.isEmpty()) {
             throw new RestaurantNotFoundException("No restaurant was found");
         }

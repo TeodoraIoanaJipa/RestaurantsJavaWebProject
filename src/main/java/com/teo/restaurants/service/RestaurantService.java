@@ -34,7 +34,7 @@ public class RestaurantService {
     }
 
     public Restaurant findRestaurantById(Integer id) {
-        Optional<Restaurant> restaurant = restaurantsRepository.getRestaurantById(id);
+        Optional<Restaurant> restaurant = restaurantsRepository.findRestaurantById(id);
         if (restaurant.isPresent()) {
             return restaurant.get();
         } else {

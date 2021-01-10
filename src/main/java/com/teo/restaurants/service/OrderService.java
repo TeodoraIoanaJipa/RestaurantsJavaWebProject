@@ -31,7 +31,7 @@ public class OrderService {
 
     private Order getOrderRestaurantAndUser(Integer restaurantId, Integer userId){
         Order order = new Order();
-        Optional<Restaurant> restaurant = restaurantsRepository.getRestaurantById(restaurantId);
+        Optional<Restaurant> restaurant = restaurantsRepository.findRestaurantById(restaurantId);
         if (restaurant.isEmpty()) {
             throw new RestaurantNotFoundException("No restaurant found for id " + restaurantId);
         }

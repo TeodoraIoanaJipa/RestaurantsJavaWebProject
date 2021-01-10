@@ -36,7 +36,7 @@ public class RestaurantsRepository {
         }
     }
 
-    public Optional<Restaurant> getRestaurantById(Integer restaurantId) {
+    public Optional<Restaurant> findRestaurantById(Integer restaurantId) {
         String sql = "SELECT * from restaurants WHERE id = ?";
         try {
             Restaurant restaurant = jdbcTemplate.queryForObject(sql, new RestaurantMapper(), restaurantId);
