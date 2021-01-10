@@ -1,6 +1,8 @@
 package com.teo.restaurants.controller;
 
+import com.teo.restaurants.exception.PriceCategoryInvalidException;
 import com.teo.restaurants.exception.RestaurantNotFoundException;
+import com.teo.restaurants.exception.RestaurantTypeNotFound;
 import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ public class RestaurantsController {
     public ResponseEntity getRestaurantsByType(@RequestParam String type) {
         try {
             return ResponseEntity.ok(restaurantService.findRestaurantsByType(type));
-        } catch (RestaurantNotFoundException e) {
+        } catch (RestaurantNotFoundException | RestaurantTypeNotFound e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -48,7 +50,7 @@ public class RestaurantsController {
     public ResponseEntity getRestaurantsByPriceCategory(@RequestParam String priceCategory) {
         try {
             return ResponseEntity.ok(restaurantService.findRestaurantsByPriceCategory(priceCategory));
-        } catch (RestaurantNotFoundException e) {
+        } catch (RestaurantNotFoundException | PriceCategoryInvalidException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

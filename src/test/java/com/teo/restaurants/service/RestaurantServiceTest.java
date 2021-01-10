@@ -164,10 +164,10 @@ public class RestaurantServiceTest {
     void findRestaurantsByPriceCategoryFailure() {
         String priceCategory = "mic";
 
-        RestaurantNotFoundException exception = assertThrows(RestaurantNotFoundException.class,
+        PriceCategoryInvalidException exception = assertThrows(PriceCategoryInvalidException.class,
                 () -> restaurantService.findRestaurantsByPriceCategory(priceCategory));
 
-        assertEquals("Ooopsy! No restaurants with that price category were found", exception.getMessage());
+        assertEquals("Price category is not valid.", exception.getMessage());
     }
 
     @Test

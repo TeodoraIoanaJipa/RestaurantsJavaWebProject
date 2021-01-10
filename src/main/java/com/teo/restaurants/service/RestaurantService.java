@@ -1,16 +1,20 @@
 package com.teo.restaurants.service;
 
 import com.teo.restaurants.dto.PriceCategory;
+import com.teo.restaurants.dto.RestaurantType;
 import com.teo.restaurants.exception.PriceCategoryInvalidException;
 import com.teo.restaurants.exception.RestaurantNotFoundException;
+import com.teo.restaurants.exception.RestaurantTypeNotFound;
 import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.repository.RestaurantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantService {
@@ -21,10 +25,10 @@ public class RestaurantService {
     @Transactional
     public void saveRestaurant(Restaurant restaurant) {
         String priceCategory = restaurant.getPriceCategory().toUpperCase();
-        if(priceCategory.equals(PriceCategory.ACCESIBIL.name()) || priceCategory.equals(PriceCategory.MODERAT.name())
-        || priceCategory.equals(PriceCategory.RIDICAT.name()) || priceCategory.equals(PriceCategory.PREMIUM.name())){
+        if (priceCategory.equals(PriceCategory.ACCESIBIL.name()) || priceCategory.equals(PriceCategory.MODERAT.name())
+                || priceCategory.equals(PriceCategory.RIDICAT.name()) || priceCategory.equals(PriceCategory.PREMIUM.name())) {
             restaurantsRepository.save(restaurant);
-        }else{
+        } else {
             throw new PriceCategoryInvalidException();
         }
     }
@@ -43,17 +47,24 @@ public class RestaurantService {
     }
 
     public List<Restaurant> findRestaurantsByType(String type) {
-        return restaurantsRepository.findAllByType(type);
+        List<String> restaurantTypes = List.of(RestaurantType.values())
+                .stream()
+                .map(restaurantType -> restaurantType.name())
+                .collect(Collectors.toList());
+        if (restaurantTypes.contains(type.toUpperCase())) {
+            return restaurantsRepository.findAllByType(type);
+        }
+        throw new RestaurantTypeNotFound();
     }
 
     public List<Restaurant> findRestaurantsByPriceCategory(String priceCategory) {
-        if(priceCategory.toUpperCase().equals(PriceCategory.MODERAT.name()) ||
-                priceCategory.toUpperCase().equals(PriceCategory.ACCESIBIL.name()) ||
-                priceCategory.toUpperCase().equals(PriceCategory.PREMIUM.name()) ||
-                priceCategory.toUpperCase().equals(PriceCategory.RIDICAT.name())){
+        List<String> priceCategories = List.of(PriceCategory.MODERAT.name(),
+                PriceCategory.ACCESIBIL.name(), PriceCategory.PREMIUM.name(),
+                PriceCategory.RIDICAT.name());
+        if (priceCategories.contains(priceCategory.toUpperCase())) {
             return restaurantsRepository.findAllByPriceCategory(priceCategory);
         }
-        throw new RestaurantNotFoundException("Ooopsy! No restaurants with that price category were found");
+        throw new PriceCategoryInvalidException();
     }
 
     public Restaurant findRestaurantByName(String name) {
