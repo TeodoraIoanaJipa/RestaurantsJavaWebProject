@@ -45,6 +45,10 @@ public class OrderService {
         return order;
     }
 
+    private void saveOrderItems(){
+
+    }
+
     @Transactional
     public void save(CreateOrderDto createOrderDto) {
         Order order = getOrderRestaurantAndUser(createOrderDto.getRestaurantId(), createOrderDto.getUserId());

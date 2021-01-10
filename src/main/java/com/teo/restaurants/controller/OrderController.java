@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -15,7 +17,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public ResponseEntity createOrder(@RequestBody CreateOrderDto createOrderDto) {
+    public ResponseEntity createOrder(@Valid @RequestBody CreateOrderDto createOrderDto) {
         try {
             orderService.save(createOrderDto);
             return ResponseEntity.ok("Order created successfully.");

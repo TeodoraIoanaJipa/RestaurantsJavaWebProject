@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @PostMapping("/add")
-    public ResponseEntity addReview(@RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<String> addReview(@Valid @RequestBody ReviewDto reviewDto) {
         try {
             reviewService.save(reviewDto);
             return ResponseEntity.ok("Review added successfully.");

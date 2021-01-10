@@ -17,8 +17,8 @@ public class RestaurantService {
     private RestaurantsRepository restaurantsRepository;
 
     @Transactional
-    public void saveRestaurants(List<Restaurant> restaurantList) {
-        restaurantList.forEach(restaurant -> restaurantsRepository.save(restaurant));
+    public void saveRestaurant(Restaurant restaurant) {
+        restaurantsRepository.save(restaurant);
     }
 
     public List<Restaurant> findAll() {

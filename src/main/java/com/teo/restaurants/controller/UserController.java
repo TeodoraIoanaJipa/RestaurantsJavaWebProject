@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -16,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity createUser(@RequestBody User user) {
+    public ResponseEntity<String> createUser(@RequestBody @Valid User user) {
         try {
             userService.signUp(user);
             return ResponseEntity.ok("User saved successfully.");

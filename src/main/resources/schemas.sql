@@ -10,14 +10,15 @@ CREATE TABLE `restaurants_project`.`restaurants` (
   `type` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`));
 
-CREATE TABLE `restaurants_project`.`users` (
-  `id` INT NOT NULL,
-  `first_name` VARCHAR(45) NOT NULL,
-  `last_name` VARCHAR(45) NOT NULL,
-  `username` VARCHAR(15) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `users` (
+  `id` int NOT NULL,
+  `first_name` varchar(20) NOT NULL,
+  `last_name` varchar(20) NOT NULL,
+  `username` varchar(15) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+)
 
 CREATE TABLE `food_product` (
   `id` int NOT NULL AUTO_INCREMENT,
