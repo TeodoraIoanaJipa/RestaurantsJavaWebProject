@@ -1,5 +1,7 @@
 package com.teo.restaurants.service;
 
+import com.teo.restaurants.dto.PriceCategory;
+import com.teo.restaurants.exception.PriceCategoryInvalidException;
 import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.model.Restaurant;
 import com.teo.restaurants.repository.RestaurantsRepository;
@@ -18,7 +20,13 @@ public class RestaurantService {
 
     @Transactional
     public void saveRestaurant(Restaurant restaurant) {
-        restaurantsRepository.save(restaurant);
+        String priceCategory = restaurant.getPriceCategory().toUpperCase();
+        if(priceCategory.equals(PriceCategory.ACCESIBIL.name()) || priceCategory.equals(PriceCategory.MODERAT.name())
+        || priceCategory.equals(PriceCategory.RIDICAT.name()) || priceCategory.equals(PriceCategory.PREMIUM.name())){
+            restaurantsRepository.save(restaurant);
+        }else{
+            throw new PriceCategoryInvalidException();
+        }
     }
 
     public List<Restaurant> findAll() {
