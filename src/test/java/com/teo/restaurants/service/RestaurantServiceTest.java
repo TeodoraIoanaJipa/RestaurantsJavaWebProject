@@ -1,5 +1,6 @@
 package com.teo.restaurants.service;
 
+import com.teo.restaurants.dto.PriceCategory;
 import com.teo.restaurants.exception.PriceCategoryInvalidException;
 import com.teo.restaurants.exception.RestaurantNotFoundException;
 import com.teo.restaurants.model.Restaurant;
@@ -39,7 +40,7 @@ public class RestaurantServiceTest {
         restaurant.setDescription(" Te vei bucura de aromele ceaiurilor Infinitea, o paletă colorată de dulcețuri, sucuri de fructe proaspete");
         restaurant.setOpeningTime("9:00");
         restaurant.setClosingTime("20:00");
-        restaurant.setPriceCategory("moderat");
+        restaurant.setPriceCategory("ridicat");
         restaurant.setType("ceainarie");
 
         Restaurant restaurant2 = new Restaurant();
@@ -57,6 +58,15 @@ public class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("save restaurant valid")
+    public void saveRestaurant()   {
+        Restaurant restaurant = restaurants.get(0);
+        restaurantService.saveRestaurant(restaurant);
+
+        verify(restaurantsRepository).save(restaurant);
+    }
+
+    @Test
     @DisplayName("save restaurant when price category is invalid")
     public void saveRestaurantWithInvalidPriceCategory()   {
         Restaurant restaurant = restaurants.get(0);
@@ -69,14 +79,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void saveRestaurantWithValidPriceCategory()   {
-        Restaurant restaurant = restaurants.get(0);
-        restaurantService.saveRestaurant(restaurant);
-
-        verify(restaurantsRepository).save(restaurant);
-    }
-
-    @Test
+    @DisplayName("find restaurant by id when invalid id")
     void findRestaurantByIdFailure() {
         Integer restaurantId = 3;
         Optional<Restaurant> restaurant = Optional.empty();
@@ -90,7 +93,8 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    void findRestaurantByIdSuccess() {
+    @DisplayName("find restaurant by id success")
+    void findRestaurantById() {
         Integer restaurantId = 2;
         Optional<Restaurant> restaurant = Optional.of(restaurants.get(1));
 
@@ -99,5 +103,43 @@ public class RestaurantServiceTest {
 
         verify(restaurantsRepository).findRestaurantById(restaurantId);
         assertEquals(actualRestaurant, restaurant.get());
+    }
+
+    @Test
+    @DisplayName("find restaurant by name success")
+    void findRestaurantByName() {
+        String restaurantName = "Grano";
+        Optional<Restaurant> restaurant = Optional.of(restaurants.get(1));
+
+        when(restaurantsRepository.getRestaurantByName(restaurantName)).thenReturn(restaurant);
+        Restaurant actualRestaurant = restaurantService.findRestaurantByName(restaurantName);
+
+        verify(restaurantsRepository).getRestaurantByName(restaurantName);
+        assertEquals(actualRestaurant, restaurant.get());
+    }
+
+    @Test
+    @DisplayName("find restaurant by name failure")
+    void findRestaurantByNameFailure() {
+        String restaurantName = "New Pizza";
+        Optional<Restaurant> restaurant = Optional.empty();
+
+        when(restaurantsRepository.getRestaurantByName(restaurantName)).thenReturn(restaurant);
+        RestaurantNotFoundException exception = assertThrows(RestaurantNotFoundException.class,
+                () -> restaurantService.findRestaurantByName(restaurantName));
+
+        assertEquals("Ooopsy! No restaurant with name " + restaurantName + " was found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("find restaurants by price category success")
+    void findRestaurantsByPriceCategory() {
+        String priceCategory = PriceCategory.MODERAT.name();
+
+        when(restaurantsRepository.findAllByPriceCategory(priceCategory)).thenReturn(List.of(restaurants.get(1)));
+        List<Restaurant> actualRestaurant = restaurantService.findRestaurantsByPriceCategory(priceCategory);
+
+        verify(restaurantsRepository).findAllByPriceCategory(priceCategory);
+        assertEquals(actualRestaurant, List.of(restaurants.get(1)));
     }
 }
